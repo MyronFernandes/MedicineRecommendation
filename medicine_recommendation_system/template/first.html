@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% block body %}
+ 
+    <div class="navbar">
+        <img src="/static/img/logoimg.jpg" style="position: absolute; top: 20px; left: 60px; width: 80px; height: 60px;"alt="Logo" class="logo">
+        <input type="text" id="search-name"  class="search-bar" oninput="filterMedicineName()" placeholder="Search By Name">
+        <!--<input type="text" id="search-use" class="search-bar" oninput="filterMovies1()" placeholder="Search By Use">
+    -->
+        <input type="button" id="submit_name" value="Submit">
+    </div>
+    <div id="results"></div>
+    <form id="medicineForm" method="post" action="display" >
+        {% csrf_token %}
+        <input type="hidden"  id="selectedMedicineName" name="selectedMedicineName">
+    </form>
+    <script>
+    var medicineName = {{ Mn|safe}};
+    var mednamel15=false;
+    var medName="";
+    var resultsContainer = document.getElementById("results");
+    function filterMedicineName() {
+        mednamel15=false;
+        var searchTerm = document.getElementById("search-name").value.toLowerCase();
+        
+        var matchingmedicine = medicineName.filter(function(medicine) {
+            return medicine.toLowerCase().includes(searchTerm);
+        });
+
+        if (matchingmedicine.length > 0) {
+            mednamel15=false;
+            medName="";
+            matchingmedicine.forEach(function(medicine) {
+                medName=medName+medicine+"%";
+            });
+            
+            console.log(medName);
+            
+            if (matchingmedicine.length > 15){
+                resultsContainer.textContent = "Give more input in the name for accurate medince";
+            }
+            else{
+                resultsContainer.textContent = "The Medicine name is right";
+                mednamel15=true;
+            }
+        }
+        else {
+            resultsContainer.textContent = "No Medicine found.";
+        }
+
+    }
+
+    document.getElementById("submit_name").addEventListener("click", function() {
+        if (mednamel15==true){
+            document.getElementById("selectedMedicineName").value = medName; 
+            //document.getElementById("selectedMedicineUses").value = medUses; 
+            document.getElementById("medicineForm").submit(); 
+                
+            console.log(selectedMovie); 
+        }
+        else{
+            resultsContainer.textContent = "Enter the correct Name";
+        }
+    });
+    </script>
+
+{% endblock body %}

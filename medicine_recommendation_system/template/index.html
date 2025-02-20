@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}
+Search page
+{% endblock title %}
+{% block body %}
+<div class="grid">
+    <!-- 
+{% with num_keys=dictionary|length %}
+    <p>Number of keys: {{ num_keys }}</p>
+{% endwith %}
+Loop through images here-->
+{% for ind,values in dict.items %}
+<div class="grid-item">
+    <a href={{values.3}} target="_blank">
+    <img src={{values.3}} style="width: 200px; height: 350px;" alt="Image"></a>
+    <div><b>Medicine Name:</b>{{ values.0 }}</div>
+    <div><b>Used for:</b>{{ values.1 }}</div>
+    <div><b>SideEffect:</b>{{ values.2 }}</div>
+    <div><b>Manufacturer:</b>{{ values.4 }}</div>
+</div>
+
+{% endfor %} 
+</div>
+<form id="medicineForm" action="/" method="post"></form>
+
+<button type="submit" onclick="mainIndex()" >Submit</button>
+</form>
+
+<script>
+function mainIndex() {
+    document.getElementById("medicineForm").submit();
+}
+
+</script>
+{% endblock body %}
